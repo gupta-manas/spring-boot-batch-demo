@@ -55,17 +55,17 @@ public class BatchConfig {
 		return new PersonItemProcessor();
 	}
 
-	/*
-	 * @Bean public JdbcBatchItemWriter<Person> writer(DataSource dataSource) {
-	 * return new JdbcBatchItemWriterBuilder<Person>()
-	 * .itemSqlParameterSourceProvider(new
-	 * BeanPropertyItemSqlParameterSourceProvider<>())
-	 * .sql("INSERT INTO people (person_id, first_name, last_name) VALUES (seq_people.nextval, :firstName, :lastName)"
-	 * ) .dataSource(dataSource) .build(); }
-	 */
+
+	@Bean public JdbcBatchItemWriter<Person> writerJdbc(DataSource dataSource) {
+		return new JdbcBatchItemWriterBuilder<Person>()
+				.itemSqlParameterSourceProvider(new
+						BeanPropertyItemSqlParameterSourceProvider<>())
+				.sql("INSERT INTO people (person_id, first_name, last_name) VALUES (seq_people.nextval, :firstName, :lastName)"
+						) .dataSource(dataSource) .build(); }
+
 
 	@Bean
-	public FlatFileItemWriter<Person> writer(){
+	public FlatFileItemWriter<Person> writerTxt(){
 		return new FlatFileItemWriterBuilder<Person>()
 				.name("personItemWriter")
 				.resource(new FileSystemResource("output.txt"))
@@ -84,15 +84,13 @@ public class BatchConfig {
 				.build();
 	}
 
-	
-	//public Step step1(JdbcBatchItemWriter<Person> writer) {
 	@Bean
 	public Step step1() {
 		return stepBuilderFactory.get("step1")
 				.<Person, Person> chunk(10)
 				.reader(reader())
 				.processor(processor())
-				.writer(writer())
+				.writer(writerTxt())
 				.build();
 	}
 
