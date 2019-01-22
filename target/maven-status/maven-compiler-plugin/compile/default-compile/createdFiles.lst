@@ -1,7 +1,0 @@
-demo\batch\JobCompletionNotificationListener.class
-demo\batch\PersonItemProcessor.class
-demo\App.class
-demo\config\BatchConfig.class
-demo\batch\PassThroughLineAggregator.class
-demo\config\BatchConfig$1.class
-demo\model\Person.class
